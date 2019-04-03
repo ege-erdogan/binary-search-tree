@@ -55,6 +55,7 @@ public class BinarySearchTree {
 
     public void delete(int value) {
         root = deleteHelper(root, value);
+        size--;
     }
 
     private Node deleteHelper(Node rootNode, int value) {
