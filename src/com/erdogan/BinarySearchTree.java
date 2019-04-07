@@ -95,14 +95,15 @@ public class BinarySearchTree {
         }
     }
 
-    public void inOrder() {
+    public void print() {
+        System.out.println();
         inOrderHelper(root);
     }
 
     private void inOrderHelper(Node rootNode) {
         if (rootNode != null) {
             inOrderHelper(rootNode.left);
-            System.out.println(rootNode.data);
+            System.out.print(rootNode.data + " ");
             inOrderHelper(rootNode.right);
         }
     }
