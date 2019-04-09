@@ -51,6 +51,67 @@ public class AVLTree {
 
     }
 
+    public void delete(int data) {
+        root = deleteHelper(root, data);
+    }
+
+    private AVLNode deleteHelper(AVLNode rootNode, int data) {
+        // standard BST deletion
+        if (rootNode == null) {
+            return rootNode;
+        }
+
+        if (data < rootNode.data) {
+            rootNode.left = deleteHelper(rootNode.left, data);
+        } else if (data > rootNode.data) {
+            rootNode.right = deleteHelper(rootNode.right, data);
+        } else {
+            // we found the root to delete if the key is the same
+            if (rootNode.left == null || rootNode.right == null) {
+                AVLNode child = (rootNode.right == null) ? rootNode.left : rootNode.right;
+                if (child == null) {
+                    child = rootNode;
+                    rootNode = null;
+                } else  {
+                    rootNode = child;
+                }
+            } else {
+                AVLNode replacement = minNode(rootNode);
+                rootNode.data = replacement.data;
+                rootNode.right = deleteHelper(rootNode, replacement.data);
+            }
+        }
+
+        // update height
+        rootNode.height = Math.max(height(rootNode.left), height(rootNode.right));
+
+        if (isBalanced(rootNode) == -1) {
+            if (data < rootNode.left.data) {
+                return rightRotate(rootNode);
+            } else {
+                rootNode.left = leftRotate(rootNode.left);
+                return leftRotate(rootNode);
+            }
+        } else if (isBalanced(rootNode) == 1) {
+            if (data < rootNode.right.data) {
+                rootNode.right = leftRotate(rootNode.right);
+                return rightRotate(rootNode);
+            } else {
+                return leftRotate(rootNode);
+            }
+        }
+
+        return rootNode;
+    }
+
+    private AVLNode minNode(AVLNode rootNode) {
+        if (rootNode.left == null) {
+            return rootNode;
+        } else {
+            return minNode(rootNode.left);
+        }
+    }
+
     // returns -1, 0, 1 corresponding to left skewed, balanced, and right skewed
     private int isBalanced(AVLNode rootNode) {
         int skew = height(rootNode.right) - height(rootNode.left);

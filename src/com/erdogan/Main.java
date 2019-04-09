@@ -12,6 +12,9 @@ public class Main {
             avl.insert(value);
         }
 
+        avl.delete(3);
+        avl.delete(5);
+
         avl.print();
 
     }
